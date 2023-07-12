@@ -4,6 +4,7 @@ import os
 
 import openai
 import speech_recognition as sr
+import whisper
 
 # Load .env file
 load_dotenv()
@@ -23,17 +24,13 @@ def transcribe_audio_to_text(filename):
     except:
         print("Sorry, could not recognize audio")
 
-def transcribe_whisper(filename):
-    '''Transcribes audio to text using OpenAI's Whisper API'''
-    recognizer = sr.Recognizer()
-    with sr.AudioFile(filename) as source:
-        audio_data = recognizer.record(source)
-    
+def transcribe_whisper(model, filename):
+    '''Transcribes audio to text using Whisper'''
     try:
-        text = recognizer.recognize_google(audio_data)
-        return text
+        result = model.transcribe(filename, fp16=False, language='english')
+        return result["text"]
     except:
-        print("Sorry, could not recognize audio")
+        print("...")
             
 def generate_response(prompt):
     '''Generates a response to a prompt using OpenAI's Davinci API'''
@@ -47,24 +44,26 @@ def generate_response(prompt):
     )
     return response['choices'][0]['text']
 
-def RTT():
+def RTT(model):
     '''Records and transcribes audio to text'''
     try:
         # Record audio
         filename = 'RTT.wav'
         # print("Recording...")
-        with sr.Microphone() as source:
+        with sr.Microphone(device_index=1) as source:
             recognizer = sr.Recognizer()
+            recognizer.adjust_for_ambient_noise(source)
             source.pause_threshold = 0
             audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
             with open(filename, "wb") as f:
                 f.write(audio.get_wav_data())
             
-        # Transcribe audio to text
+        # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
         text = transcribe_audio_to_text(filename)
+        # text = transcribe_whisper(model, filename)
         if text:
-            # print(f"Transcription: {text}")
-            print(text)
+            print(f"Transcription: {text}")
+            # print(text)
                 
     except Exception as e:
         print("[Voice Assistant] An error occurred: {}".format(e))
@@ -94,14 +93,16 @@ def translate():
     except Exception as e:
         print("[Translate] An error occurred: {}".format(e))
 
-def main():
-    print("Recording...")
+def main(loop=False):
+    print("\033[32mLoading Whisper Model...\033[37m")
+    model = whisper.load_model('small')         # Whisper model size (tiny, base, small, medium, large)
+    print("\033[32mRecording...\033[37m(Ctrl+C to Quit)\033[0m")
+    print(sr.Microphone.list_microphone_names())
     while True:    
-        # Live Transcription
+        # Live Transcription w/ Whisper
         try:
-            RTT()
-        except Exception as e:
-            print("[Main] An error occurred: {}".format(e))
-                
+            RTT(model)
+        except (KeyboardInterrupt, SystemExit): break
+
 if __name__ == "__main__":
     main()

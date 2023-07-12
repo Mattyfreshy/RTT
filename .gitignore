@@ -7,3 +7,5 @@
 input.wav
 RTT.wav
 translate.wav
+
+\__pycache__
