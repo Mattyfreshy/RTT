@@ -3,7 +3,6 @@ import time
 import os
 
 import openai
-import pyttsx3
 import speech_recognition as sr
 
 # Load .env file
@@ -11,9 +10,6 @@ load_dotenv()
 
 # OpenAI API Key
 openai.api_key = os.getenv("OPENAI_API_KEY")
-
-# Initialize speech recognition engine for speaking
-# engine = pyttsx3.init()
 
 def transcribe_audio_to_text(filename):
     '''Transcribes audio to text using Google's Speech Recognition API'''
@@ -51,11 +47,7 @@ def generate_response(prompt):
     )
     return response['choices'][0]['text']
 
-# def speak_text(text):
-#     engine.say(text)
-#     engine.runAndWait()
-
-def RTT(enable_response: bool = False):
+def RTT():
     '''Records and transcribes audio to text'''
     try:
         # Record audio
@@ -71,16 +63,8 @@ def RTT(enable_response: bool = False):
         # Transcribe audio to text
         text = transcribe_audio_to_text(filename)
         if text:
-            print(f"Transcription: {text}")
-            
-            # Generate response
-            if enable_response:
-                response = generate_response(text)
-                print(f"Response: {response}")
-            
-            # read response using text-to-speech
-            # if enable_text_to_speech:
-                # speak_text(response)
+            # print(f"Transcription: {text}")
+            print(text)
                 
     except Exception as e:
         print("[Voice Assistant] An error occurred: {}".format(e))
@@ -106,10 +90,6 @@ def translate():
             # Generate Translation
             response = openai.Audio.translate('whisper-1', transcript)
             print(f"Translation: {response}")
-            
-            # read response using text-to-speech
-            # if enable_text_to_speech:
-                # speak_text(response)
                 
     except Exception as e:
         print("[Translate] An error occurred: {}".format(e))
