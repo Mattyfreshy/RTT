@@ -52,8 +52,8 @@ def generate_response(prompt):
 #     engine.say(text)
 #     engine.runAndWait()
 
-def voice_assistant(enable_response: bool = False):
-    '''Records audio and generates a response using OpenAI's Davinci API'''
+def RTT(enable_response: bool = False):
+    '''Records and transcribes audio to text'''
     try:
         # Record audio
         filename = 'voiceAssistant.wav'
@@ -128,7 +128,7 @@ def main():
                 transcription = recognizer.recognize_google(audio)
                 # Match transcription to trigger
                 if transcription.lower() == trigger:
-                    voice_assistant()
+                    RTT()
                 elif transcription.lower() == "translate":
                     translate()
             except Exception as e:
