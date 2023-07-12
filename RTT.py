@@ -52,15 +52,15 @@ def RTT(model, microphone):
         # print("Recording...")
         with microphone as source:
             recognizer = sr.Recognizer()
-            # recognizer.adjust_for_ambient_noise(source)
+            recognizer.adjust_for_ambient_noise(source)
             source.pause_threshold = 0
             audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
             with open(filename, "wb") as f:
                 f.write(audio.get_wav_data())
             
         # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-        text = transcribe_audio_to_text(filename)
-        # text = transcribe_whisper(model, filename)
+        # text = transcribe_audio_to_text(filename)
+        text = transcribe_whisper(model, filename)
         if text:
             print(f"Transcription: {text}")
             # print(text)
