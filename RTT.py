@@ -22,7 +22,7 @@ def transcribe_audio_to_text(filename):
         text = recognizer.recognize_google(audio_data)
         return text
     except:
-        print("Sorry, could not recognize audio")
+        print("...")
 
 def transcribe_whisper(model, filename):
     '''Transcribes audio to text using Whisper'''
@@ -44,13 +44,13 @@ def generate_response(prompt):
     )
     return response['choices'][0]['text']
 
-def RTT(model):
+def RTT(model, microphone):
     '''Records and transcribes audio to text'''
     try:
         # Record audio
         filename = 'RTT.wav'
         # print("Recording...")
-        with sr.Microphone(device_index=1) as source:
+        with microphone as source:
             recognizer = sr.Recognizer()
             recognizer.adjust_for_ambient_noise(source)
             source.pause_threshold = 0
@@ -59,8 +59,8 @@ def RTT(model):
                 f.write(audio.get_wav_data())
             
         # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-        text = transcribe_audio_to_text(filename)
-        # text = transcribe_whisper(model, filename)
+        # text = transcribe_audio_to_text(filename)
+        text = transcribe_whisper(model, filename)
         if text:
             print(f"Transcription: {text}")
             # print(text)
@@ -97,11 +97,13 @@ def main(loop=False):
     print("\033[32mLoading Whisper Model...\033[37m")
     model = whisper.load_model('small')         # Whisper model size (tiny, base, small, medium, large)
     print("\033[32mRecording...\033[37m(Ctrl+C to Quit)\033[0m")
-    print(sr.Microphone.list_microphone_names())
+    # Debugging: Print all microphone names
+    # print(sr.Microphone.list_microphone_names())
+    microphone = sr.Microphone(device_index=1)  # Microphone device index
     while True:    
         # Live Transcription w/ Whisper
         try:
-            RTT(model)
+            RTT(model, microphone)
         except (KeyboardInterrupt, SystemExit): break
 
 if __name__ == "__main__":
