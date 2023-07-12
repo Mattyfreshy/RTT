@@ -59,8 +59,8 @@ def RTT(model, microphone):
                 f.write(audio.get_wav_data())
             
         # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-        # text = transcribe_audio_to_text(filename)
-        text = transcribe_whisper(model, filename)
+        text = transcribe_audio_to_text(filename)
+        # text = transcribe_whisper(model, filename)
         if text:
             print(f"Transcription: {text}")
             # print(text)
