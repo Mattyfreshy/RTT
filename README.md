@@ -58,5 +58,5 @@ Then try again
 8. Run the app using python or python3 depending on your system:
 
    ```bash
-   python Voice_GPT3.py
+   python RTT.py
    ```
