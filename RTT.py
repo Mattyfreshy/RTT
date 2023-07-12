@@ -52,7 +52,7 @@ def RTT(model, microphone):
         # print("Recording...")
         with microphone as source:
             recognizer = sr.Recognizer()
-            recognizer.adjust_for_ambient_noise(source)
+            # recognizer.adjust_for_ambient_noise(source)
             source.pause_threshold = 0
             audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
             with open(filename, "wb") as f:
