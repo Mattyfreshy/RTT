@@ -16,6 +16,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 # engine = pyttsx3.init()
 
 def transcribe_audio_to_text(filename):
+    '''Transcribes audio to text using Google's Speech Recognition API'''
     recognizer = sr.Recognizer()
     with sr.AudioFile(filename) as source:
         audio_data = recognizer.record(source)
@@ -27,6 +28,7 @@ def transcribe_audio_to_text(filename):
         print("Sorry, could not recognize audio")
 
 def transcribe_whisper(filename):
+    '''Transcribes audio to text using OpenAI's Whisper API'''
     recognizer = sr.Recognizer()
     with sr.AudioFile(filename) as source:
         audio_data = recognizer.record(source)
@@ -38,6 +40,7 @@ def transcribe_whisper(filename):
         print("Sorry, could not recognize audio")
             
 def generate_response(prompt):
+    '''Generates a response to a prompt using OpenAI's Davinci API'''
     response = openai.Completion.create(
         engine="text-davinci-003",
         prompt=prompt,
@@ -56,8 +59,8 @@ def RTT(enable_response: bool = False):
     '''Records and transcribes audio to text'''
     try:
         # Record audio
-        filename = 'voiceAssistant.wav'
-        print("Recording...")
+        filename = 'RTT.wav'
+        # print("Recording...")
         with sr.Microphone() as source:
             recognizer = sr.Recognizer()
             source.pause_threshold = 1
@@ -112,27 +115,13 @@ def translate():
         print("[Translate] An error occurred: {}".format(e))
 
 def main():
-    while True:
-        # Voice Assistant Trigger
-        trigger = "rice"
-        # Print Trigger Options
-        print(f"Say {trigger} to start voice assistant")
-        print(f"Say translate to translate to English")
-        with sr.Microphone() as source:
-            # Set up the recognizer with the source
-            recognizer = sr.Recognizer()
-            audio = recognizer.listen(source)
-            
-            # Try converting audio to text
-            try:
-                transcription = recognizer.recognize_google(audio)
-                # Match transcription to trigger
-                if transcription.lower() == trigger:
-                    RTT()
-                elif transcription.lower() == "translate":
-                    translate()
-            except Exception as e:
-                print("[Main] An error occurred: {}".format(e))
+    print("Recording...")
+    while True:    
+        # Live Transcription
+        try:
+            RTT()
+        except Exception as e:
+            print("[Main] An error occurred: {}".format(e))
                 
 if __name__ == "__main__":
     main()
