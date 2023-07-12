@@ -55,7 +55,7 @@ def RTT():
         # print("Recording...")
         with sr.Microphone() as source:
             recognizer = sr.Recognizer()
-            source.pause_threshold = 1
+            source.pause_threshold = 0
             audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
             with open(filename, "wb") as f:
                 f.write(audio.get_wav_data())
