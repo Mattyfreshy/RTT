@@ -1,0 +1,9 @@
+\venv
+
+.env
+
+.python-version
+
+input.wav
+voiceAssistant.wav
+translate.wav

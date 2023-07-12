@@ -1,11 +1,9 @@
-# Real Time Voice Assistant
+# Real Time Transcription
 
-Goal of this project is to create a real time voice assistant that can be used to transcribe speech to text from pc audio and microphone.
-In addition to live transcriptions, if prompted with the trigger word, the assistant will be able to respond to questions.
+Goal of this project is to create a real time transcription tool that can be used to transcribe audio from microphone and output to text.
 
 ## Features
 - Transcribe audio from microphone and output to text in terminal.
-- Transcribe and translate foreign language to english from microphone and output to text in terminal.
 
 ## Requirements
 - Python 3.6 or higher
