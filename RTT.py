@@ -27,7 +27,7 @@ def transcribe_audio_to_text(filename):
 def transcribe_whisper(model: whisper, filename):
     '''Transcribes audio to text using Whisper'''
     try:
-        result = model.transcribe(filename, fp16=False, language='english')
+        result = model.transcribe(filename, fp16=False, language='english', condition_on_previous_text=False)
         return result["text"]
     except Exception as e:
         print("[Whisper] An error occurred: {}".format(e))
