@@ -31,7 +31,7 @@ Then try again
 3. Navigate into the project directory:
 
    ```bash
-   cd RTTVoiceAssistant
+   cd RTT
    ```
 
 4. Create a new virtual environment:
@@ -60,4 +60,3 @@ Then try again
    ```bash
    python Voice_GPT3.py
    ```
-   
