@@ -24,13 +24,14 @@ def transcribe_audio_to_text(filename):
     except:
         print("...")
 
-def transcribe_whisper(model, filename):
+def transcribe_whisper(model: whisper, filename):
     '''Transcribes audio to text using Whisper'''
     try:
         result = model.transcribe(filename, fp16=False, language='english')
         return result["text"]
-    except:
-        print("...")
+    except Exception as e:
+        print("[Whisper] An error occurred: {}".format(e))
+        # print("...")
             
 def generate_response(prompt):
     '''Generates a response to a prompt using OpenAI's Davinci API'''
@@ -53,14 +54,15 @@ def RTT(model, microphone):
         with microphone as source:
             recognizer = sr.Recognizer()
             recognizer.adjust_for_ambient_noise(source)
+            source.energy_threshold = 300
             source.pause_threshold = 0
             audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
             with open(filename, "wb") as f:
                 f.write(audio.get_wav_data())
             
         # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-        text = transcribe_audio_to_text(filename)
-        # text = transcribe_whisper(model, filename)
+        # text = transcribe_audio_to_text(filename)
+        text = transcribe_whisper(model, filename)
         if text:
             print(f"Transcription: {text}")
             # print(text)
@@ -95,11 +97,11 @@ def translate():
 
 def main(loop=False):
     print("\033[32mLoading Whisper Model...\033[37m")
-    model = whisper.load_model('small')         # Whisper model size (tiny, base, small, medium, large)
+    model = whisper.load_model('base')         # Whisper model size (tiny, base, small, medium, large)
     print("\033[32mRecording...\033[37m(Ctrl+C to Quit)\033[0m")
     # Debugging: Print all microphone names
     # print(sr.Microphone.list_microphone_names())
-    microphone = sr.Microphone(device_index=1)  # Microphone device index
+    microphone = sr.Microphone(device_index=1, sample_rate=16000)  # Microphone device index
     while True:    
         # Live Transcription w/ Whisper
         try:
