@@ -7,9 +7,9 @@ RECORD_SEC = 5                  # [sec]. duration recording audio.
 
 
 # Currently only works with Windows/linux due to MacOS not supporting loopback recording functionality.
-print(sc.all_speakers())
-print(sc.all_microphones())
-print(sc.default_speaker())
+print('All Speakers: \n', sc.all_speakers())
+print('All Microphones: \n', sc.all_microphones())
+print('Default Speaker: \n', sc.default_speaker())
 
 # record audio with loopback from default speaker.
 with sc.get_microphone(id=str(sc.default_speaker().name), include_loopback=True).recorder(samplerate=SAMPLE_RATE) as mic:
