@@ -12,6 +12,7 @@ import wave
 from ASR.whisperASR import Wisp
 from ASR.googleASR import GScribe
 from ASR.assemblyASR import Ass
+from util import Util
 
 # Load .env file
 load_dotenv()
