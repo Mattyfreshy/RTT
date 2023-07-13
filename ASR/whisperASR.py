@@ -49,7 +49,6 @@ class Wisp:
     def transcribe(self, filename):
         """Transcribes audio to text using Whisper"""
         try:
-            print(filename)
             result = self.model.transcribe(filename, fp16=self.fp16, language=None, condition_on_previous_text=False)
             return result["text"]
         except Exception as e:
