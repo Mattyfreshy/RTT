@@ -1,6 +1,10 @@
 import soundcard as sc
 import soundfile as sf
 import pyaudio
+import base64
+from time import sleep
+
+from ASR.whisperASR import Wisp
 
 OUTPUT_FILE_NAME = "output.wav"    # file name.
 SAMPLE_RATE = 48000              # [Hz]. sampling rate.
@@ -54,11 +58,26 @@ class Util:
 
         while True:
             data = stream.read(self.FRAMES_PER_BUFFER)
+            data = base64.b64encode(data).decode("utf-8")
+            print(str(data))
+            sleep(0.01)
+
+    def test2(self, wisp: Wisp):
+        # record audio with loopback from default speaker.
+        with sc.get_microphone(id=str(sc.default_speaker().name), include_loopback=True).recorder(samplerate=SAMPLE_RATE) as mic:
+            # record audio with loopback from default speaker.
+            data = mic.record(numframes=SAMPLE_RATE*RECORD_SEC)
             print(data)
+            # Get transcription from whisper
+            # wisp.transcribe(data[:, 0])
+
+        pass
 
 def main():
+    wisp = Wisp()
+
     util = Util()
-    util.test()
+    util.test2(wisp)
 
 if __name__ == "__main__":
     main()

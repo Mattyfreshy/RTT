@@ -16,10 +16,10 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class Wisp:
-    def __init__(self, model='base', microphone=None):
+    def __init__(self, model='base', microphone=sr.Microphone()):
         """ If no model is specified, the default is 'base' """
         self.model = whisper.load_model(model)
-        self.microphone = microphone if microphone else sr.Microphone()
+        self.microphone = microphone
         self.fp16 = True if platform == 'win32' else False
 
     def load_model(self, model: str):
