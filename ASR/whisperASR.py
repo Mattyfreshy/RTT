@@ -52,7 +52,7 @@ class Wisp:
             result = self.model.transcribe(filename, fp16=self.fp16, language=None, condition_on_previous_text=False)
             return result["text"]
         except Exception as e:
-            print("[Whisper] An error occurred: ", e)
+            print("[Whisper] An error occurred: {}".format(e))
             # print("...")
 
     def translate_whisper(self):
