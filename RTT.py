@@ -10,7 +10,7 @@ import pyaudio
 import wave
 
 from ASR.whisperASR import Wisp
-import ASR.assemblyASR
+# import ASR.assemblyASR
 from ASR.googleASR import GScribe
 
 # Load .env file
@@ -20,19 +20,19 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class RTT:
-    def __init__(self, model=None, microphone=None):
-        self.model = model
+    def __init__(self, engine=None, microphone=None):
+        """ If no engine is specified, the default is Google's Speech Recognition API """
+        self.engine = engine
         self.microphone = microphone if microphone else sr.Microphone()
         self.fp16 = True if platform == 'win32' else False
 
     def transcribe_audio_to_text(self, filename):
         """Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper"""
-        if self.model is None:
+        if isinstance(self.engine, Wisp):
+            text = self.engine.transcribe_whisper(filename)
+        else:
             gscribe = GScribe()
             text = gscribe.transcribe_google(filename)
-        else:
-            wisp = Wisp(model=self.model)
-            text = wisp.transcribe_whisper(filename)
 
         # Print transcription
         if text:
@@ -100,23 +100,23 @@ class RTT:
 
 
             # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-            self.transcribe_audio_to_text(self.model, WAVE_OUTPUT_FILENAME)
+            self.transcribe_audio_to_text(WAVE_OUTPUT_FILENAME)
 
             pass
         except Exception as e:
             print("[RTT_system] An error occurred: {}".format(e))
 
 def main():
-    # Load Whisper Model
-    # Whisper model sizes (tiny, base, small, medium, large)
-    model = silent_whisper.load_model("base")
-    
     # Debugging: Print all microphone names
     # print(sr.Microphone.list_microphone_names())
     microphone = sr.Microphone(device_index=1, sample_rate=16000)  # Microphone device index
+
+    # Load Whisper model
+    print("\033[32mLoading Whisper Model...\033[37m")
+    wisp = Wisp('base', microphone=microphone)
     
-    # Set model = None if you want to use Google's Speech Recognition API instead of Whisper
-    rtt = RTT(model, microphone)
+    # Set engine = None if you want to use Google's Speech Recognition API
+    rtt = RTT(wisp, microphone)
 
     # Start Recording
     print("\033[32mRecording...\033[37m(Ctrl+C to Quit)\033[0m")

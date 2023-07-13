@@ -16,8 +16,9 @@ load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 class Wisp:
-    def __init__(self, model=None, microphone=None):
-        self.model = model
+    def __init__(self, model='base', microphone=None):
+        """ If no model is specified, the default is 'base' """
+        self.model = whisper.load_model(model)
         self.microphone = microphone if microphone else sr.Microphone()
         self.fp16 = True if platform == 'win32' else False
 
@@ -25,10 +26,11 @@ class Wisp:
         """
         Loads a model from Whisper.
         Whisper model sizes ['tiny', 'base', 'small', 'medium', 'large']
+        Default is 'base'
         """
 
         print("\033[32mLoading Whisper Model...\033[37m")
-        self.model = whisper.load(model)
+        self.model = whisper.load_model(model if model else 'base')
 
     def generate_response(self, prompt):
         """Generates a response to a prompt using OpenAI's Davinci API"""
@@ -48,8 +50,8 @@ class Wisp:
             result = self.model.transcribe(filename, fp16=self.fp16, language=None, condition_on_previous_text=False)
             return result["text"]
         except Exception as e:
-            # print("[Whisper] An error occurred: {}".format(e))
-            print("...")
+            print("[Whisper] An error occurred: {}".format(e))
+            # print("...")
 
     def translate_whisper(self):
         """Translates audio to English using OpenAI's Whisper API"""
