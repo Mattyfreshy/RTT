@@ -9,9 +9,9 @@ import whisper
 import pyaudio
 import wave
 
-from whisperASR import silent_whisper
-import assemblyASR
-from googleASR import GScribe
+from ASR.whisperASR import Wisp
+import ASR.assemblyASR
+from ASR.googleASR import GScribe
 
 # Load .env file
 load_dotenv()
@@ -31,7 +31,7 @@ class RTT:
             gscribe = GScribe()
             text = gscribe.transcribe_google(filename)
         else:
-            wisp = silent_whisper(model=self.model)
+            wisp = Wisp(model=self.model)
             text = wisp.transcribe_whisper(filename)
 
         # Print transcription
