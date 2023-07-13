@@ -79,12 +79,14 @@ class Util:
         pass
 
 def main():
+    print(torch.cuda.is_available())
+    print(platform.system())
+    
     wisp = Wisp()
 
     util = Util()
-    # util.test2(wisp)
-    print(torch.cuda.is_available())
-    print(platform.system())
+    util.test2(wisp)
+    
 
 if __name__ == "__main__":
     main()
