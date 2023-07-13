@@ -3,6 +3,7 @@ import soundfile as sf
 import pyaudio
 import base64
 from time import sleep
+import torch
 
 from ASR.whisperASR import Wisp
 
@@ -80,7 +81,8 @@ def main():
     wisp = Wisp()
 
     util = Util()
-    util.test2(wisp)
+    # util.test2(wisp)
+    print(torch.cuda.is_available())
 
 if __name__ == "__main__":
     main()
