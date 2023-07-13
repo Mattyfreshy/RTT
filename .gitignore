@@ -4,9 +4,11 @@
 
 .python-version
 
-input.wav
 RTT.wav
 translate.wav
+input.wav
+output.wav
+
 
 \__pycache__
 

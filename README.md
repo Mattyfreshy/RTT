@@ -4,6 +4,7 @@ Goal of this project is to create a real time transcription tool that can be use
 
 ## Features
 - Transcribe audio from microphone and output to text in terminal.
+- ASR (Automatic Speech Recognition) using Google Speech API, Whisper, or AssemblyAI.
 
 ## Requirements
 - Python 3.6 or higher
