@@ -49,8 +49,7 @@ class Wisp:
     def transcribe(self, filename):
         """Transcribes audio to text using Whisper"""
         try:
-            filepath = os.getcwd() + "/" + filename
-            result = self.model.transcribe(filepath, language=None, condition_on_previous_text=False)
+            result = self.model.transcribe(filename, language=None, condition_on_previous_text=False)
             return result["text"]
         except Exception as e:
             print("[Whisper] An error occurred: {}".format(e))

@@ -23,6 +23,15 @@ sudo apt-get install portaudio19-dev
 ```
 Then try again
 
+## Files
+### RTT.py
+Main file that runs the program.
+### system_record.py
+Records audio from system and outputs to text using loopback.
+### util.py
+Utility functions for the program.
+### ASR
+Folder containing ASR modules. Currently supports Google Speech API, Whisper, and AssemblyAI.
 ## Setup
 
 1. If you don’t have Python installed, [install it from here](https://www.python.org/downloads/).
