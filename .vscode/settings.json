@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
+        "assemblyai",
         "astype",
         "dotenv",
         "frombuffer",
+        "gscribe",
         "numframes",
         "openai",
         "portaudio",
@@ -12,6 +14,7 @@
         "soundcard",
         "soundfile",
         "tracebacks",
-        "venv"
+        "venv",
+        "websockets"
     ]
 }

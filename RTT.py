@@ -9,171 +9,122 @@ import whisper
 import pyaudio
 import wave
 
+from whisperASR import silent_whisper
+import assemblyASR
+from googleASR import GScribe
+
 # Load .env file
 load_dotenv()
 
 # OpenAI API Key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def transcribe_google(filename):
-    '''Transcribes audio to text using Google's Speech Recognition API'''
-    recognizer = sr.Recognizer()
-    with sr.AudioFile(filename) as source:
-        audio_data = recognizer.record(source)
-    
-    try:
-        text = recognizer.recognize_google(audio_data)
-        return text
-    except:
-        print("...")
+class RTT:
+    def __init__(self, model=None, microphone=None):
+        self.model = model
+        self.microphone = microphone if microphone else sr.Microphone()
+        self.fp16 = True if platform == 'win32' else False
 
-def transcribe_whisper(model: whisper, filename):
-    '''Transcribes audio to text using Whisper'''
-    try:
-        if platform == 'win32':
-            # Windows
-            fp16=True
+    def transcribe_audio_to_text(self, filename):
+        """Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper"""
+        if self.model is None:
+            gscribe = GScribe()
+            text = gscribe.transcribe_google(filename)
         else:
-            # Mac OS/Linux
-            fp16=False
-        
-        result = model.transcribe(filename, fp16=fp16, language='english', condition_on_previous_text=False)
-        return result["text"]
-    except Exception as e:
-        print("[Whisper] An error occurred: {}".format(e))
-        # print("...")
-            
+            wisp = silent_whisper(model=self.model)
+            text = wisp.transcribe_whisper(filename)
 
-def transcribe_audio_to_text(model, filename):
-    # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-    if model is None:
-        text = transcribe_google(filename)
-    else:
-        text = transcribe_whisper(model, filename)
+        # Print transcription
+        if text:
+            print(f"Transcription: {text}")
+            # print(text)
 
-    # Print transcription
-    if text:
-        print(f"Transcription: {text}")
-        # print(text)
-
-def generate_response(prompt):
-    '''Generates a response to a prompt using OpenAI's Davinci API'''
-    response = openai.Completion.create(
-        engine="text-davinci-003",
-        prompt=prompt,
-        temperature=0.5,
-        max_tokens=4000,
-        n=1,
-        stop=None
-    )
-    return response['choices'][0]['text']
-
-def RTT_mic(model: whisper, microphone: sr.Microphone):
-    '''Records and transcribes mic audio to text'''
-    try:
-        # Record audio
-        filename = 'RTT.wav'
-        with microphone as source:
-            recognizer = sr.Recognizer()
-            recognizer.adjust_for_ambient_noise(source)
-            source.energy_threshold = 300
-            source.pause_threshold = 0
-            audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
-            with open(filename, "wb") as f:
-                f.write(audio.get_wav_data())
-            
-        # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-        transcribe_audio_to_text(model, filename)
+    def RTT_mic(self):
+        """Records and transcribes mic audio to text"""
+        try:
+            # Record audio
+            filename = 'RTT.wav'
+            with self.microphone as source:
+                recognizer = sr.Recognizer()
+                recognizer.adjust_for_ambient_noise(source)
+                source.energy_threshold = 300
+                source.pause_threshold = 0
+                audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
+                with open(filename, "wb") as f:
+                    f.write(audio.get_wav_data())
                 
-    except Exception as e:
-        print("[RTT_mic] An error occurred: {}".format(e))
+            # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
+            self.transcribe_audio_to_text(filename)
+                    
+        except Exception as e:
+            print("[RTT_mic] An error occurred: {}".format(e))
 
-def RTT_system(model: whisper):
-    '''Records and transcribes system audio to text'''
-    try:
-        # Record audio
-        CHUNK = 1024
-        FORMAT = pyaudio.paInt16
-        CHANNELS = 2
-        RATE = 44100
-        RECORD_SECONDS = 5
-        WAVE_OUTPUT_FILENAME = "output.wav"
+    def RTT_system(self):
+        """Records and transcribes system audio to text"""
+        try:
+            # Record audio
+            CHUNK = 1024
+            FORMAT = pyaudio.paInt16
+            CHANNELS = 2
+            RATE = 44100
+            RECORD_SECONDS = 5
+            WAVE_OUTPUT_FILENAME = "output.wav"
 
-        p = pyaudio.PyAudio()
+            p = pyaudio.PyAudio()
 
-        stream = p.open(format=FORMAT,
-                        channels=CHANNELS,
-                        rate=RATE,
-                        input=True,
-                        frames_per_buffer=CHUNK)
+            stream = p.open(format=FORMAT,
+                            channels=CHANNELS,
+                            rate=RATE,
+                            input=True,
+                            frames_per_buffer=CHUNK)
 
-        print("* recording")
+            print("* recording")
 
-        frames = []
+            frames = []
 
-        for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-            data = stream.read(CHUNK)
-            frames.append(data)
+            for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+                data = stream.read(CHUNK)
+                frames.append(data)
 
-        print("* done recording")
+            print("* done recording")
 
-        stream.stop_stream()
-        stream.close()
-        p.terminate()
+            stream.stop_stream()
+            stream.close()
+            p.terminate()
 
-        with wave.open(WAVE_OUTPUT_FILENAME, 'wb') as wf:
-            wf.setnchannels(CHANNELS)
-            wf.setsampwidth(p.get_sample_size(FORMAT))
-            wf.setframerate(RATE)
-            wf.writeframes(b''.join(frames))
+            with wave.open(WAVE_OUTPUT_FILENAME, 'wb') as wf:
+                wf.setnchannels(CHANNELS)
+                wf.setsampwidth(p.get_sample_size(FORMAT))
+                wf.setframerate(RATE)
+                wf.writeframes(b''.join(frames))
 
 
-        # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
-        transcribe_audio_to_text(model, WAVE_OUTPUT_FILENAME)
+            # Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper
+            self.transcribe_audio_to_text(self.model, WAVE_OUTPUT_FILENAME)
 
-        pass
-    except Exception as e:
-        print("[RTT_system] An error occurred: {}".format(e))
-    
-def translate():
-    '''Translates audio to English using OpenAI's Whisper API'''
-    try:
-        # Record audio
-        audio_file = 'translate.wav'
-        print("Recording...")
-        with sr.Microphone() as source:
-            recognizer = sr.Recognizer()
-            source.pause_threshold = 1
-            audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
-            with open(audio_file, "wb") as f:
-                f.write(audio.get_wav_data())
-            
-        # Transcribe audio to text
-        transcript = openai.Audio.transcribe('whisper-1', audio_file)
-        if transcript:
-            print(f"Transcription: {transcript}")
-            
-            # Generate Translation
-            response = openai.Audio.translate('whisper-1', transcript)
-            print(f"Translation: {response}")
-                
-    except Exception as e:
-        print("[Translate] An error occurred: {}".format(e))
+            pass
+        except Exception as e:
+            print("[RTT_system] An error occurred: {}".format(e))
 
-def main(loop=False):
-    print("\033[32mLoading Whisper Model...\033[37m")
-    model = whisper.load_model('base')         # Whisper model size (tiny, base, small, medium, large)
-    print("\033[32mRecording...\033[37m(Ctrl+C to Quit)\033[0m")
+def main():
+    # Load Whisper Model
+    # Whisper model sizes (tiny, base, small, medium, large)
+    model = silent_whisper.load_model("base")
     
     # Debugging: Print all microphone names
     # print(sr.Microphone.list_microphone_names())
     microphone = sr.Microphone(device_index=1, sample_rate=16000)  # Microphone device index
     
+    # Set model = None if you want to use Google's Speech Recognition API instead of Whisper
+    rtt = RTT(model, microphone)
+
+    # Start Recording
+    print("\033[32mRecording...\033[37m(Ctrl+C to Quit)\033[0m")
+
+    # Record and Transcribe Audio until Ctrl+C is pressed
     while True:    
-        # Live Transcription w/ Whisper
         try:
-            # Set model = None if you want to use Google's Speech Recognition API
-            RTT_mic(model, microphone)
+            rtt.RTT_mic()
         except (KeyboardInterrupt, SystemExit): break
 
 if __name__ == "__main__":
