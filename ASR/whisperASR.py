@@ -20,7 +20,7 @@ class Wisp:
         """ If no model is specified, the default is 'base' """
         self.model = whisper.load_model(model)
         self.microphone = microphone
-        self.fp16 = True if platform == 'win32' else False
+        self.fp16 = True if platform == 'windows' else False
 
     def load_model(self, model: str):
         """
