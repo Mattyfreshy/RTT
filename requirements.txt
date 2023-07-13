@@ -30,10 +30,12 @@ soundfile==0.12.1
 SpeechRecognition==3.10.0
 sympy==1.12
 tiktoken==0.3.3
-torch==2.0.1
+torch==2.0.1 ; sys_platform == 'darwin'
 torchaudio==2.0.2 ; sys_platform == 'darwin'
-torchaudio --index-url https://download.pytorch.org/whl/cu118 ; sys_platform == 'windows'
-torchvision==0.15.2
+torchvision==0.15.2 ; sys_platform == 'darwin'
+torch==2.0.1+c117 ; sys_platform == 'windows'
+torchaudio==2.0.2+cu117 ; sys_platform == 'windows'
+torchvision==0.15.2+cu117 ; sys_platform == 'windows'
 tqdm==4.65.0
 typing_extensions==4.7.1
 urllib3==2.0.3
