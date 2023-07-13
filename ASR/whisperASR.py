@@ -44,7 +44,7 @@ class Wisp:
         )
         return response['choices'][0]['text']
 
-    def transcribe_whisper(self, filename):
+    def transcribe(self, filename):
         """Transcribes audio to text using Whisper"""
         try:
             result = self.model.transcribe(filename, fp16=self.fp16, language=None, condition_on_previous_text=False)

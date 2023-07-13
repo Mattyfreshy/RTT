@@ -30,10 +30,10 @@ class RTT:
     def transcribe_audio_to_text(self, filename):
         """Transcribe audio to text. As of now, Google's Speech Recognition API is faster than Whisper"""
         if isinstance(self.engine, Wisp):
-            text = self.engine.transcribe_whisper(filename)
+            text = self.engine.transcribe(filename)
         else:
             gscribe = GScribe()
-            text = gscribe.transcribe_google(filename)
+            text = gscribe.transcribe(filename)
 
         # Print transcription
         if text:

@@ -13,7 +13,7 @@ class GScribe:
     def __init__(self) -> None:
         pass
 
-    def transcribe_google(self, filename):
+    def transcribe(self, filename):
         """Transcribes audio to text using Google's Speech Recognition API"""
         recognizer = sr.Recognizer()
         with sr.AudioFile(filename) as source:
