@@ -8,6 +8,7 @@ import speech_recognition as sr
 import whisper
 import pyaudio
 import wave
+import torch
 
 # Load .env file
 load_dotenv()
@@ -18,9 +19,10 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 class Wisp:
     def __init__(self, model='base', microphone=sr.Microphone()):
         """ If no model is specified, the default is 'base' """
-        self.model = whisper.load_model(model)
         self.microphone = microphone
         self.fp16 = True if platform == 'windows' else False
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.model = whisper.load_model(model, device=self.device)
 
     def load_model(self, model: str):
         """
@@ -30,7 +32,7 @@ class Wisp:
         """
 
         print("\033[32mLoading Whisper Model...\033[37m")
-        self.model = whisper.load_model(model if model else 'base')
+        self.model = whisper.load_model(model if model else 'base', device=self.device)
 
     def generate_response(self, prompt):
         """Generates a response to a prompt using OpenAI's Davinci API"""
@@ -47,7 +49,7 @@ class Wisp:
     def transcribe(self, filename):
         """Transcribes audio to text using Whisper"""
         try:
-            result = self.model.transcribe(filename, fp16=self.fp16, language=None, condition_on_previous_text=False)
+            result = self.model.transcribe(filename, language=None, condition_on_previous_text=False)
             return result["text"]
         except Exception as e:
             print("[Whisper] An error occurred: {}".format(e))
