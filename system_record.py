@@ -4,7 +4,7 @@ import soundfile as sf
 OUTPUT_FILE_NAME = "output.wav"    # file name.
 SAMPLE_RATE = 48000              # [Hz]. sampling rate.
 RECORD_SEC = 5                  # [sec]. duration recording audio.
-GAIN_FACTOR = 7.0               # gain factor for amplifying audio. (1.0 = no amplification)
+GAIN_FACTOR = 10.0               # gain factor for amplifying audio. (1.0 = no amplification)
 
 
 # Currently only works with Windows/linux due to MacOS not supporting loopback recording functionality.
