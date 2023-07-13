@@ -74,14 +74,13 @@ class Util:
             sf.write(file=OUTPUT_FILE_NAME, data=data[:, 0], samplerate=SAMPLE_RATE)
             
             # Get transcription from whisper
-            wisp.transcribe(OUTPUT_FILE_NAME)
-
-        pass
+            text = wisp.transcribe(OUTPUT_FILE_NAME)
+            print(text)
 
 def main():
-    print(torch.cuda.is_available())
-    print(platform.system())
-    
+    # print("Platform", platform.system())
+    # print("Has cuda: ", torch.cuda.is_available())
+
     wisp = Wisp()
 
     util = Util()

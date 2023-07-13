@@ -20,8 +20,8 @@ class Wisp:
     def __init__(self, model='base', microphone=sr.Microphone()):
         """ If no model is specified, the default is 'base' """
         self.microphone = microphone
-        self.fp16 = True if platform == 'windows' else False
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        self.fp16 = True if self.device == 'cuda' else False
         self.model = whisper.load_model(model, device=self.device)
 
     def load_model(self, model: str):
@@ -50,7 +50,7 @@ class Wisp:
         """Transcribes audio to text using Whisper"""
         try:
             print(filename)
-            result = self.model.transcribe(filename, language=None, condition_on_previous_text=False)
+            result = self.model.transcribe(filename, fp16=self.fp16, language=None, condition_on_previous_text=False)
             return result["text"]
         except Exception as e:
             print("[Whisper] An error occurred: {}".format(e))
