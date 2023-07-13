@@ -10,8 +10,8 @@ import pyaudio
 import wave
 
 from ASR.whisperASR import Wisp
-# import ASR.assemblyASR
 from ASR.googleASR import GScribe
+from ASR.assemblyASR import Ass
 
 # Load .env file
 load_dotenv()
@@ -105,6 +105,13 @@ class RTT:
             pass
         except Exception as e:
             print("[RTT_system] An error occurred: {}".format(e))
+
+    def Assembly_mic(self):
+        try:
+            ass = Ass()
+            ass.run()
+        except:
+            pass
 
 def main():
     # Debugging: Print all microphone names
