@@ -66,7 +66,8 @@ class Ass:
                     while True:
                         try:
                             result_str = await _ws.recv()
-                            print(json.loads(result_str)['text'])
+                            if json.loads(result_str)['text'] != "":
+                                print(json.loads(result_str)['text'])
                         except websockets.exceptions.ConnectionClosedError as e:
                             print(e)
                             assert e.code == 4008
