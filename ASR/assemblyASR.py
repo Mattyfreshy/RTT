@@ -81,14 +81,19 @@ class Ass:
 
                             # If result is not empty, print the result
                             if json_result != "":
-                                #! 'Let's go' repeated gets printed many times
-                                # If the result is shorter than the previous result, make newline. 
+                                ### Make new line if sentence finished else edit inline
+                                # Clean the json result and the previous line of punctuation
                                 json_clean = json_result.translate(str.maketrans('', '', string.punctuation))
-                                if prev_line and prev_line not in json_clean.lower():
-                                     print()
+                                prev_clean = prev_line.translate(str.maketrans('', '', string.punctuation)) if prev_line else json_clean
+                                # print("json_clean: ", json_clean)
+                                # print("prev_clean: ", prev_clean)
+
                                 # If inline is true, print the result on the same line
                                 if self.inline:
-                                    print(ERASE_LINE + json_result, end="\r")
+                                    if prev_line and prev_clean.lower() in json_clean.lower():
+                                        print(ERASE_LINE + json_result, end="\r")
+                                    else:
+                                        print()
                                 else:
                                     print(json_result)
                                 prev_line = json_result
