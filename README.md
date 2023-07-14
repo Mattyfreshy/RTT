@@ -32,6 +32,10 @@ Records audio from system and outputs to text using loopback.
 Utility functions for the program.
 ### ASR
 Folder containing ASR modules. Currently supports Google Speech API, Whisper, and AssemblyAI.
+### file_converter.py
+Converts audio files to any supporting format. Requires ffmpeg.
+
+
 ## Setup
 
 1. If you don’t have Python installed, [install it from here](https://www.python.org/downloads/).
