@@ -5,21 +5,29 @@ import asyncio
 import base64
 import json
 import os
+import string
 from dotenv import load_dotenv
 
 load_dotenv()
 
 auth_key = os.getenv("ASSEMBLYAI_API_KEY")
 
-class Ass:
-    def __init__(self) -> None:
-        self.FRAMES_PER_BUFFER = 3200
-        self.FORMAT = pyaudio.paInt16
-        self.CHANNELS = 1
-        self.RATE = 16000
-        self.p = pyaudio.PyAudio()
-        self.URL = "wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000"
+# ANSI escape codes for erasing the current line
+ERASE_LINE = '\x1b[2K' 
 
+
+class Ass:
+    def __init__(self, inline=True, frames_per_buffer=3200, format=pyaudio.paInt16, channels=1, rate=16000, p=pyaudio.PyAudio()) -> None:
+        """
+        If inline = true, print the result on the same line.
+        """
+        self.FRAMES_PER_BUFFER = frames_per_buffer
+        self.FORMAT = format
+        self.CHANNELS = channels
+        self.RATE = rate
+        self.p = p
+        self.URL = "wss://api.assemblyai.com/v2/realtime/ws?sample_rate=" + str(rate)
+        self.inline = inline
 
     def run(self):
         # starts recording
@@ -63,16 +71,33 @@ class Ass:
                         await asyncio.sleep(0.01)
 
                 async def receive():
+                    # Conditional to prevent overwriting the previous line in certain cases
+                    prev_line = None
                     while True:
                         try:
+                            # Receive the result and load it into a json object
                             result_str = await _ws.recv()
-                            if json.loads(result_str)['text'] != "":
-                                print(json.loads(result_str)['text'])
+                            json_result = str(json.loads(result_str)['text'])
+
+                            # If result is not empty, print the result
+                            if json_result != "":
+                                # If the result is shorter than the previous result, make newline.
+                                json_clean = json_result.translate(str.maketrans('', '', string.punctuation))
+                                if prev_line and prev_line not in json_clean.lower():
+                                     print()
+                                # If inline is true, print the result on the same line
+                                if self.inline:
+                                    print(ERASE_LINE + json_result, end="\r")
+                                else:
+                                    print(json_result)
+                                prev_line = json_result
+
                         except websockets.exceptions.ConnectionClosedError as e:
                             print(e)
                             assert e.code == 4008
                             break
                         except Exception as e:
+                            print(e)
                             assert False, "Not a websocket 4008 error"
 
                 send_result, receive_result = await asyncio.gather(send(), receive())
