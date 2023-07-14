@@ -23,16 +23,16 @@ class Util:
     
     # Currently only works with Windows/linux due to MacOS not supporting loopback recording functionality.
     def print_all_speakers(self):
-        print('All Speakers: \n', sc.all_speakers())
+        print('All Speakers: \n', sc.all_speakers(), '\n')
     
     def print_all_microphones(self):
-        print('All Microphones: \n', sc.all_microphones())
+        print('All Microphones: \n', sc.all_microphones(), '\n')
 
     def print_default_speaker(self):
-        print('Default Speaker: \n', sc.default_speaker())
+        print('Default Speaker: \n', sc.default_speaker(), '\n')
 
     def print_default_microphone(self):
-        print('Default Microphone: \n', sc.default_microphone())
+        print('Default Microphone: \n', sc.default_microphone(), '\n')
 
     def print_all_devices(self):
         self.print_all_speakers()
@@ -84,6 +84,7 @@ class Util:
 def main():
     # print("Platform", platform.system())
     # print("Has cuda: ", torch.cuda.is_available())
+    # print(Util.all_devices())
 
     wisp = Wisp()
 
