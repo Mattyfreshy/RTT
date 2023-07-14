@@ -1,6 +1,16 @@
 import soundcard as sc
 import soundfile as sf
 
+"""
+This script records audio from the default speaker and saves it to a .wav file.
+- It uses the soundcard library to record audio from the default speaker.
+- It also amplifies the audio by a factor of GAIN_FACTOR.
+- Currently only works on windows/linux due to MacOS not supporting loopback recording functionality.
+
+This script is based on the following example:
+https://python-sounddevice.readthedocs.io/en/0.4.1/examples.html#recording-with-arbitrary-duration 
+"""
+
 OUTPUT_FILE_NAME = "output.wav"    # file name.
 SAMPLE_RATE = 48000              # [Hz]. sampling rate.
 RECORD_SEC = 5                  # [sec]. duration recording audio.

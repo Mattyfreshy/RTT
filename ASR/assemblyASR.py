@@ -86,7 +86,9 @@ def main():
         ass = Ass()
         ass.run()
     except (KeyboardInterrupt, SystemExit):
-        pass
+        print("Interrupted by user")
+    except Exception as e:
+        print("[Ass] An error occurred: {}".format(e))
 
 if __name__ == "__main__":
     main()
