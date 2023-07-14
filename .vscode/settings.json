@@ -7,10 +7,14 @@
         "fftsize",
         "frombuffer",
         "gscribe",
+        "gtranslate",
+        "highlightthickness",
         "indata",
         "numframes",
         "openai",
         "outdata",
+        "padx",
+        "pady",
         "portaudio",
         "pyaudio",
         "pyttsx",
@@ -20,7 +24,9 @@
         "sounddevice",
         "soundfile",
         "tracebacks",
+        "translatepy",
         "venv",
-        "websockets"
+        "websockets",
+        "yscrollcommand"
     ]
 }
