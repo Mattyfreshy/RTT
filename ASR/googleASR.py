@@ -22,5 +22,16 @@ class GScribe:
         try:
             text = recognizer.recognize_google(audio_data)
             return text
-        except:
+        except Exception as e:
+            # print("[GScribe] An error occurred: {}".format(e))
             print("...") 
+
+
+def main():
+    # Example usage
+    gscribe = GScribe()
+    text = gscribe.transcribe("output.wav")
+    print(text)
+
+if __name__ == "__main__":
+    main()

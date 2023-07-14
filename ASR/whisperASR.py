@@ -81,4 +81,11 @@ class Wisp:
         except Exception as e:
             print("[Translate] An error occurred: {}".format(e))
 
-        
+def main():
+    # Example usage
+    wisp = Wisp()
+    text = wisp.transcribe("output.wav")
+    print(text)
+
+if __name__ == "__main__":
+    main()

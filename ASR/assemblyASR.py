@@ -81,8 +81,9 @@ class Ass:
 
 
 def main():
-    ass = Ass()
+    # To Run: python assemblyASR.py
     try:
+        ass = Ass()
         ass.run()
     except (KeyboardInterrupt, SystemExit):
         pass
