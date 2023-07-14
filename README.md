@@ -30,10 +30,10 @@ Main file that runs the program.
 Records audio from system and outputs to text using loopback.
 ### util.py
 Utility functions for the program.
-### ASR
-Folder containing ASR modules. Currently supports Google Speech API, Whisper, and AssemblyAI.
 ### file_converter.py
 Converts audio files to any supporting format. Requires ffmpeg.
+### ASR
+Folder containing ASR modules. Currently supports Google Speech API, Whisper, and AssemblyAI.
 
 
 ## Setup
