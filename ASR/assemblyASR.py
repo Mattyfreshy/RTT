@@ -81,7 +81,8 @@ class Ass:
 
                             # If result is not empty, print the result
                             if json_result != "":
-                                # If the result is shorter than the previous result, make newline.
+                                #! 'Let's go' repeated gets printed many times
+                                # If the result is shorter than the previous result, make newline. 
                                 json_clean = json_result.translate(str.maketrans('', '', string.punctuation))
                                 if prev_line and prev_line not in json_clean.lower():
                                      print()
