@@ -47,7 +47,10 @@ class Wisp:
         return response['choices'][0]['text']
 
     def transcribe(self, filename):
-        """Transcribes audio to text using Whisper"""
+        """
+        Transcribes audio to text using Whisper.
+        Supported file formats: mp3, mp4, mpeg, mpga, m4a, wav, and webm.
+        """
         try:
             result = self.model.transcribe(filename, fp16=self.fp16, language=None, condition_on_previous_text=False)
             return result["text"]
@@ -82,9 +85,9 @@ class Wisp:
             print("[Translate] An error occurred: {}".format(e))
 
 def main():
-    # Example usage
+    # Example usage. Use supported file formats.
     wisp = Wisp()
-    text = wisp.transcribe("output.wav")
+    text = wisp.transcribe("output.mp3")
     print(text)
 
 if __name__ == "__main__":

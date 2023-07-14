@@ -4,11 +4,14 @@
 
 .python-version
 
-RTT.wav
-translate.wav
-input.wav
-output.wav
-
+# ignore recordings
+*.mp3
+*.mp4
+*.mpeg
+*.mpga
+*.m4a
+*.wav
+*.webm
 
 \__pycache__
 
