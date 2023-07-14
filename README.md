@@ -24,19 +24,23 @@ sudo apt-get install portaudio19-dev
 Then try again
 
 ## Files
+
 - RTT.py
    - Main file that runs the program.
-### RTT_spectrogram.py
-Records audio from microphone and outputs to text using spectrogram.
-Taken from: https://python-sounddevice.readthedocs.io/en/0.4.1/examples.html#recording-with-arbitrary-duration 
-### system_record.py
-Records audio from system and outputs to text using loopback.
-### util.py
-Utility functions for the program.
-### file_converter.py
-Converts audio files to any supporting format. Requires ffmpeg.
-### ASR
-Folder containing ASR modules. Currently supports Google Speech API, Whisper, and AssemblyAI.
+
+- RTT_spectrogram.py
+   - Records audio from microphone and outputs to text using spectrogram.
+   - Taken from: https://python-sounddevice.readthedocs.io/en/0.4.1/examples.html#recording-with-arbitrary-duration 
+
+- system_record.py
+   - Records audio from system and outputs to text using loopback.
+
+- util.py
+   - Utility functions for the program.
+- file_converter.py
+   - Converts audio files to any supporting format. Requires ffmpeg.
+- ASR
+   - Folder containing ASR modules. Currently supports Google Speech API, Whisper, and AssemblyAI.
 
 
 ## Setup
