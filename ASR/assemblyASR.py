@@ -54,7 +54,7 @@ class Ass:
                 print("Receiving SessionBegins ...")
                 session_begins = await _ws.recv()
                 print(session_begins)
-                print("Sending messages ...")
+                print("Sending/Transcribing messages ...")
                 async def send():
                     while True:
                         try:

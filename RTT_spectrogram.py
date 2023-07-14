@@ -1,6 +1,6 @@
 """
 Taken from:
-https://python-sounddevice.readthedocs.io/en/0.4.1/examples.html#recording-with-arbitrary-duration 
+https://python-sounddevice.readthedocs.io/en/0.4.1/examples.html#real-time-text-mode-spectrogram
 """
 
 """Show a text-mode spectrogram using live microphone data."""

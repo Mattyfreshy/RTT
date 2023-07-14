@@ -9,6 +9,8 @@ import whisper
 import pyaudio
 import wave
 
+from faster_whisper import WhisperModel
+
 from ASR.whisperASR import Wisp
 from ASR.googleASR import GScribe
 from ASR.assemblyASR import Ass
@@ -48,6 +50,8 @@ class RTT:
             with self.microphone as source:
                 recognizer = sr.Recognizer()
                 recognizer.adjust_for_ambient_noise(source)
+                # Definitely do this, dynamic energy compensation lowers the energy threshold dramatically to a point where the SpeechRecognizer never stops recording.
+                recognizer.dynamic_energy_threshold = False
                 source.energy_threshold = 300
                 source.pause_threshold = 0
                 audio = recognizer.listen(source, phrase_time_limit=None, timeout=None)
@@ -121,7 +125,7 @@ def main():
 
     # Load Whisper model
     print("\033[32mLoading Whisper Model...\033[37m")
-    wisp = Wisp('base', microphone=microphone)
+    wisp = Wisp('large', microphone=microphone)
     
     # Set engine = None if you want to use Google's Speech Recognition API
     rtt = RTT(wisp, microphone)

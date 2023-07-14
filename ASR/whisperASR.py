@@ -16,9 +16,14 @@ load_dotenv()
 # OpenAI API Key
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+
+""" Whisper Model """
 class Wisp:
     def __init__(self, model='base', microphone=sr.Microphone()):
-        """ If no model is specified, the default is 'base' """
+        """ 
+        If no model is specified, the default is 'base'
+        Whisper model sizes ['tiny', 'base', 'small', 'medium', 'large']
+        """
         self.microphone = microphone
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         self.fp16 = True if self.device == 'cuda' else False
@@ -83,6 +88,13 @@ class Wisp:
                     
         except Exception as e:
             print("[Translate] An error occurred: {}".format(e))
+
+
+""" Fast Whisper Model """
+class FastWhisper:
+    def __init__(self) -> None:
+        pass
+
 
 def main():
     # Example usage. Use supported file formats.

@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "arange",
         "assemblyai",
         "astype",
         "dotenv",
@@ -9,6 +10,7 @@
         "indata",
         "numframes",
         "openai",
+        "outdata",
         "portaudio",
         "pyaudio",
         "pyttsx",
