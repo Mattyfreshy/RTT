@@ -39,7 +39,7 @@ class RTT:
 
         # Print transcription
         if text:
-            print(f"Transcription: {text}")
+            print(f"{'Wisp' if self.engine else 'Google'}: {text}")
             # print(text)
 
     def RTT_mic(self):
@@ -125,10 +125,11 @@ def main():
 
     # Load Whisper model
     print("\033[32mLoading Whisper Model...\033[37m")
-    wisp = Wisp('large', microphone=microphone)
+    wisp = Wisp('medium', microphone=microphone)
     
     # Set engine = None if you want to use Google's Speech Recognition API
-    rtt = RTT(wisp, microphone)
+    rtt = RTT(engine=wisp, microphone=microphone)
+    # rtt = RTT(engine=None, microphone=microphone)
 
     # Start Recording
     print("\033[32mRecording...\033[37m(Ctrl+C to Quit)\033[0m")

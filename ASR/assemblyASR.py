@@ -114,7 +114,7 @@ class Ass:
 def main():
     # To Run: python assemblyASR.py
     try:
-        ass = Ass()
+        ass = Ass(inline=False)
         ass.run()
     except (KeyboardInterrupt, SystemExit):
         print("Interrupted by user")
